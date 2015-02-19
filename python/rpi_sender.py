@@ -52,7 +52,6 @@ def zocp_on_modified(peer, name, data, *args, **kwargs):
     for key, value in data.items():
         if 'value' in value.keys():
             try:
-                videosrc.set_property("brightness", 90)
                 videosrc.set_property(key, value['value'])
             except Exception as e:
                 print("Failed setting property {0} to {1} : {3}".format(key, value, e))
@@ -84,7 +83,6 @@ if __name__ == "__main__":
 
     #videosrc.set_property("num-buffers", 400)
     videosrc.set_property("bitrate", 1000000)
-    videosrc.set_property("brightness", 10)
     h264parse.set_property("config-interval", 1)
     sink.set_property("host", "192.168.18.117")
     sink.set_property("port", 5000)

@@ -19,6 +19,9 @@
 #
 # Use the following pipeline for a sender:
 # gst-launch-1.0 -v videotestsrc ! video/x-raw,frame-rate=10/1 ! x264enc speed-preset=1 tune=zero-latency byte-stream=true intra-refresh=true option-string="bframes=0:force-cfr:no-mbtree:sync-lookahead=0:sliced-threads:rc-lookahead=0" ! video/x-h264,profile=high ! rtph264pay config-interval=1 ! udpsink host=127.0.0.1 port=5000
+#
+# Debian dependencies:
+# apt-get install gstreamer1.0-plugins-bad gstreamer1.0-plugins-good gstreamer1.0-tools python3-gst-1.0 gstreamer1.0-libav gir1.2-gstreamer-1.0 gir1.2-gst-plugins-base-1.0
 
 import gi
 gi.require_version('Gst', '1.0')
@@ -138,6 +141,7 @@ def bus_call(bus, msg, *args):
     return True
         
 
+#def reshape_callback(glsink, glctx, width, height):
 def reshape_callback(glsink, width, height):
     print("reshape", width, height)
     glViewport(0, 0, width, height);
@@ -152,6 +156,7 @@ def glib_idle(*args, **kwargs):
 
 g_tex = None
 # Draw a triangle using the shaders.
+#def draw_callback(glsink, glctx, texture, width, height):
 def draw_callback(glsink, texture, width, height):
     global program
     if texture:
@@ -161,7 +166,7 @@ def draw_callback(glsink, texture, width, height):
         if not texture:
             return True
         initGL()
-    print("draw", program)
+
     tl = z.capability['top_left']['value']
     tr = z.capability['top_right']['value']
     br = z.capability['bottom_right']['value']
@@ -293,7 +298,7 @@ if __name__ == "__main__":
         GObject.IO_IN, zocp_handle
     )
     # update the fisplay every 1/60s
-    GObject.idle_add(glib_idle)
+    #GObject.idle_add(glib_idle)
 
     # run
     pipeline.set_state(Gst.State.PLAYING)
