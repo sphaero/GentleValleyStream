@@ -1,10 +1,10 @@
 #/usr/bin/env python3
 #
+# Gentle Valley Stream Receiver
 # Copyright (c) 2014 Stichting z25.org
 # Copyright (c) 2014 Arnaud Loonstra <arnaud@sphaero.org>
-# RPI Stream Receiver
 #
-# RPI Stream Receiver is free software: you can redistribute it and/or modify
+# GVS Stream Receiver is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
