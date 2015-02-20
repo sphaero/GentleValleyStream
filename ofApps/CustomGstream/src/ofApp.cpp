@@ -4,26 +4,24 @@
 void ofApp::setup(){
 	ofBackground(255,255,255);
 	ofSetVerticalSync(true);
-	ofSetFrameRate(30);
 
-	// Uncomment this to show movies with alpha channels
-	// fingerMovie.setPixelFormat(OF_PIXELS_RGBA);
-	
-	fingerMovie.setPlayer(ofPtr<ofCustomGstVideoPlayer>(new ofCustomGstVideoPlayer));
-
-	fingerMovie.load("movies/fingers.mov");
-	//fingerMovie.setLoopState(OF_LOOP_NORMAL);
-	//fingerMovie.play();
+    gst.setPipeline("udpsrc port=5000 ! application/x-rtp,encoding-name=H264,payload=96 ! rtph264depay ! h264parse ! decodebin ! videoconvert", OF_PIXELS_RGB, true);
+    gst.startPipeline();
+    gst.play();
+    tex.allocate(320,240,GL_RGB);
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-	fingerMovie.update();
+    gst.update();
+    if(gst.isFrameNew()){
+        tex.loadData(gst.getPixels(),320,240,GL_RGB);
+    }
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-	fingerMovie.draw(20,20);
+    tex.draw(20,20);
 }
 
 //--------------------------------------------------------------
