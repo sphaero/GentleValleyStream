@@ -1,0 +1,41 @@
+h1. Installation
+
+Execute the following as root on a raspberry pi:
+<pre>
+cat << EOF > /etc/apt/sources.list.d/jessie.list
+deb http://mirrordirector.raspbian.org/raspbian/ jessie main contrib non-free rpi
+deb http://archive.raspbian.org/raspbian jessie main contrib non-free rpi
+deb-src http://archive.raspbian.org/raspbian jessie main contrib non-free rpi
+EOF
+
+cat << EOF > /etc/apt/preferences
+Package: *
+Pin: release n=wheezy
+Pin-Priority: 900
+
+Package: *
+Pin: release n=jessie
+Pin-Priority: 300
+
+Package: *
+Pin: release o=Raspbian
+Pin-Priority: -10
+EOF
+
+apt-get update
+apt-get remove gstreamer1.0-x gstreamer1.0-plugins-good gstreamer1.0-plugins-base gstreamer1.0-plugins-bad gstreamer1.0-omx gstreamer1.0-libav gstreamer1.0-alsa libgstreamer-plugins-base1.0-0 libgstreamer1.0-0
+apt-get -y install gstreamer1.0-plugins-bad/zix25 \
+    gstreamer1.0-plugins-good/zix25 \
+    gstreamer1.0-tools/zix25 \
+    python3-gst-1.0/zix25 \
+    gir1.2-gstreamer-1.0/zix25 \
+    gir1.2-gst-plugins-base-1.0/zix25 \
+    libgstreamer-plugins-base1.0-0/zix25 \
+    libgstreamer1.0-0/zix25 \
+    libgstreamer-plugins-bad1.0-0/zix25 \
+    libvpx1/jessie
+</pre>
+
+Install the raspicam v4l driver
+
+...
