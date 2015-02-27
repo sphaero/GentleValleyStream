@@ -2,6 +2,10 @@ h1. Installation
 
 Execute the following as root on a raspberry pi:
 <pre>
+cat << EOF > /etc/apt/sources.list.d/zix25.list
+deb http://lola.z25.org/~arnaud/debian zix25/
+EOF
+
 cat << EOF > /etc/apt/sources.list.d/jessie.list
 deb http://mirrordirector.raspbian.org/raspbian/ jessie main contrib non-free rpi
 deb http://archive.raspbian.org/raspbian jessie main contrib non-free rpi
