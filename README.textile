@@ -1,4 +1,4 @@
-h1. Installation
+h1. Raspberry Pi Instructions
 
 Execute the following as root on a raspberry pi:
 <pre>
@@ -50,3 +50,7 @@ Finally with a pi cam attached run:
 <pre>
 python3 rpi_sender.py
 </pre>
+
+h1. Openframeworks
+
+Just make sure OF_ROOT in config.make is pointing to the openFrameworks directory
