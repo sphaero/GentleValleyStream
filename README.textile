@@ -54,3 +54,11 @@ python3 rpi_sender.py
 h1. Openframeworks
 
 Just make sure OF_ROOT in config.make is pointing to the openFrameworks directory
+
+Also make sure OF is using Gstreamer1.0 not 0.10. 
+Debian:
+<pre>
+sudo apt-get remove libgstreamer0.10-dev libgstreamer-plugins-base0.10-dev
+sudo apt-get install libgstreamer-plugins-base1.0-dev libgstreamer1.0-dev
+</pre>
+
