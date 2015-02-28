@@ -28,7 +28,7 @@ EOF
 
 apt-get update
 apt-get remove gstreamer1.0-x gstreamer1.0-plugins-good gstreamer1.0-plugins-base gstreamer1.0-plugins-bad gstreamer1.0-omx gstreamer1.0-libav gstreamer1.0-alsa libgstreamer-plugins-base1.0-0 libgstreamer1.0-0
-apt-get -y install gstreamer1.0-plugins-bad/zix25 \
+apt-get install gstreamer1.0-plugins-bad/zix25 \
     gstreamer1.0-plugins-good/zix25 \
     gstreamer1.0-tools/zix25 \
     python3-gst-1.0/zix25 \
