@@ -5,28 +5,30 @@ void ofApp::setup(){
 	ofBackground(255,255,255);
 	ofSetVerticalSync(true);
 
-    gst.setPipeline("udpsrc port=5000 ! application/x-rtp,encoding-name=H264,payload=96 ! rtph264depay ! h264parse ! decodebin", OF_PIXELS_NATIVE, true);
-    gst.setPixelFormat(OF_PIXELS_NATIVE);
+    gst.setPipeline("videotestsrc", OF_PIXELS_NATIVE, true);
     gst.startPipeline();
     gst.play();
-    tex.allocate(1920,1080,OF_PIXELS_I420);
+    //tex.allocate(1920,1080,OF_PIXELS_I420);
+    ofLogError() << ofIsGLProgrammableRenderer();
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
     gst.update();
-    if(gst.isFrameNew()){
+    /*if(gst.isFrameNew()){
         if (tex.getWidth() != gst.getWidth())
         {
             tex.allocate(gst.getWidth(), gst.getHeight(), OF_PIXELS_I420);
         }
         tex.loadData(gst.getPixels(),gst.getWidth(),gst.getHeight(),OF_PIXELS_I420);
-    }
+    }*/
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    tex.draw(20,20);
+    if(gst.getTexture() != NULL ) gst.getTexture()->draw(20,20);
+    else ofLogError() << "NULL";
+
 }
 
 //--------------------------------------------------------------

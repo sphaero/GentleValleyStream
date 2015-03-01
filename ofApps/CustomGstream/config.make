@@ -76,7 +76,7 @@ OF_ROOT = ${HOME}/Documents/z25/z25-lib/unstable/openFrameworks
 # add a runtime path to search for those shared libraries, since they aren't 
 # incorporated directly into the final executable application binary.
 ################################################################################
-# PROJECT_LDFLAGS=-Wl,-rpath=./libs
+PROJECT_LDFLAGS=`pkg-config --libs gstreamer-gl-1.0`
 
 ################################################################################
 # PROJECT DEFINES
@@ -104,7 +104,7 @@ OF_ROOT = ${HOME}/Documents/z25/z25-lib/unstable/openFrameworks
 #
 #   Note: Leave a leading space when adding list items with the += operator
 ################################################################################
-# PROJECT_CFLAGS = 
+PROJECT_CFLAGS = `pkg-config --cflags gstreamer-gl-1.0`
 
 ################################################################################
 # PROJECT OPTIMIZATION CFLAGS
