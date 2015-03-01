@@ -5,7 +5,7 @@ void ofApp::setup(){
 	ofBackground(255,255,255);
 	ofSetVerticalSync(true);
 
-    gst.setPipeline("udpsrc port=5000 ! application/x-rtp,encoding-name=H264,payload=96 ! rtpjitterbuffer latency=200 ! rtph264depay ! h264parse ! vaapidecode ! videoconvert", OF_PIXELS_RGB, true);
+    gst.setPipeline("udpsrc port=5000 ! application/x-rtp,encoding-name=H264,payload=96 ! rtpjitterbuffer latency=200 ! rtph264depay ! h264parse ! vaapidecode ! glcolorscale", OF_PIXELS_RGB, true);
     //gst.setPipeline("udpsrc port=5000 ! application/x-rtp,encoding-name=H264,payload=96 ! rtph264depay ! h264parse ! decodebin ! videoconvert", OF_PIXELS_RGB, true);
     gst.startPipeline();
     gst.play();
