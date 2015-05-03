@@ -52,11 +52,59 @@ def zocp_on_modified(peer, name, data, *args, **kwargs):
     for key, value in data.items():
         if 'value' in value.keys():
             try:
-                videosrc.set_property(key, value['value'])
+                if key in ('port', 'host'):
+                    sink.set_property(key, value['value'])
+                else:
+                    stop_pipeline()
+                    videosrc.set_property(key, value['value'])
+                    #setup_pipeline()
+                    start_pipeline()
             except Exception as e:
                 print("Failed setting property {0} to {1} : {3}".format(key, value, e))
             else:
                 print("set {0} to {1}".format(key, value['value']))
+
+
+def setup_pipeline():
+    #videosrc.set_property("num-buffers", 400)
+    videosrc.set_property("bitrate", 1000000)
+    h264parse.set_property("config-interval", 1)
+    sink.set_property("host", "192.168.18.117")
+    sink.set_property("port", 5000)
+
+    # add elements
+    pipeline.add(videosrc)
+    pipeline.add(h264parse)
+    pipeline.add(rtppay)
+    pipeline.add(sink)
+
+    # link elements 
+    videosrc.link(h264parse)
+    h264parse.link(rtppay)
+    rtppay.link(sink)
+    #decoder.link(queue)
+    #queue.link(glimagesink)
+    
+
+
+def start_pipeline():
+    # run
+    pipeline.set_state(Gst.State.PLAYING)
+
+def stop_pipeline():
+    pipeline.set_state(Gst.State.PAUSED)
+    #videosrc.unlink(h264parse)
+    #h264parse.unlink(rtppay)
+    #rtppay.unlink(sink)
+
+    # rm elements
+    #pipeline.remove(videosrc)
+    #pipeline.remove(h264parse)
+    #pipeline.remove(rtppay)
+    #pipeline.remove(sink)
+
+
+
 
 if __name__ == "__main__":
     GObject.threads_init()
@@ -80,26 +128,6 @@ if __name__ == "__main__":
     # change video source caps
     caps = Gst.Caps.from_string("video/x-raw, width=320, height=240")
     #caps = Gst.Caps.from_string("application/x-rtp,encoding-name=H264,payload=96")
-
-    #videosrc.set_property("num-buffers", 400)
-    videosrc.set_property("bitrate", 1000000)
-    h264parse.set_property("config-interval", 1)
-    sink.set_property("host", "192.168.18.117")
-    sink.set_property("port", 5000)
-
-    # add elements
-    pipeline.add(videosrc)
-    pipeline.add(h264parse)
-    pipeline.add(rtppay)
-    pipeline.add(sink)
-
-    # link elements 
-    videosrc.link(h264parse)
-    h264parse.link(rtppay)
-    rtppay.link(sink)
-    #decoder.link(queue)
-    #queue.link(glimagesink)
-    
 
     # zocp 
     z = ZOCP()
@@ -130,9 +158,13 @@ if __name__ == "__main__":
     z.register_float("roi-y", 0., access='rw', min=0., max=1.0)
     z.register_float("roi-w", 1., access='rw', min=0., max=1.0)
     z.register_float("roi-h", 1., access='rw', min=0., max=1.0)
+    z.register_string("host", "192.168.18.117", access="rw")
+    z.register_int("port", 5000, access='rw')
     # set the on_modified method to our own method
     z.on_modified = zocp_on_modified
     z.start()
+    setup_pipeline()
+    start_pipeline()
     # listen to the zocp inbox socket
     GObject.io_add_watch(
         z.inbox.getsockopt(zmq.FD), 
@@ -142,8 +174,6 @@ if __name__ == "__main__":
     # update the fisplay every 1/60s
     #GObject.idle_add(glib_idle)
 
-    # run
-    pipeline.set_state(Gst.State.PLAYING)
     try:
         loop.run()
     except Exception as e:
