@@ -156,8 +156,53 @@ def glib_idle(*args, **kwargs):
 
 g_tex = None
 # Draw a triangle using the shaders.
-#def draw_callback(glsink, glctx, texture, width, height):
+# Draw a triangle using the shaders.
 def draw_callback(glsink, texture, width, height):
+    if not program:
+        initGL()
+
+    tl = z.capability['top_left']['value']
+    tr = z.capability['top_right']['value']
+    br = z.capability['bottom_right']['value']
+    bl = z.capability['bottom_left']['value']
+    vVertices = array('f', [tl[0],  tl[1],  0.0, # pos 0 
+                            0.0, 0.0,            # texcoord 0
+                            bl[0],  bl[1],  0.0, # pos 1
+                            0.0, 1.0,            # texcoord 1
+                            br[0],  br[1], 0.0,  # pos 2
+                            1.0, 1.0,            # texcoord 2
+                            tr[0],  tr[1],  0.0, # pos 3
+                            1.0, 0.0, ])         # texcoord 3
+    indices = array('H', [0, 1, 2, 0, 2, 3])
+
+    # Clear the color buffer.
+    glClear(GL_COLOR_BUFFER_BIT)
+
+    # Use the program object.
+    glUseProgram(program)
+
+    # Load the vertex data.
+    positionLoc = glGetAttribLocation( program, "a_position" )
+    glVertexAttribPointer(positionLoc, 3, GL_FLOAT, False, 5*4, vVertices)
+
+    # Load the texture coordinate
+    texCoordLoc = glGetAttribLocation( program, "a_texCoord")
+    glVertexAttribPointer ( texCoordLoc, 2, GL_FLOAT, False, 5*4, vVertices[3:])
+
+    glEnableVertexAttribArray(positionLoc)
+    glEnableVertexAttribArray(texCoordLoc)
+
+    glActiveTexture(GL_TEXTURE0)
+    glBindTexture (GL_TEXTURE_2D, texture);
+    # Set the texture sampler to texture unit 0
+    tex = glGetUniformLocation(program, "tex")
+    glUniform1i ( tex, 0 )
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, indices)
+
+    return True
+
+#def draw_callback(glsink, glctx, texture, width, height):
+def draw_callback2(glsink, texture, width, height):
     global program
     if texture:
         g_tex = texture
@@ -245,7 +290,7 @@ if __name__ == "__main__":
     #videosrc = Gst.ElementFactory.make('videotestsrc', "videotestsrc0")
     videosrc = Gst.ElementFactory.make('udpsrc', 'videosrc0')
     depay = Gst.ElementFactory.make('rtph264depay', 'depay0')
-    decoder = Gst.ElementFactory.make('avdec_h264', 'decoder0')
+    decoder = Gst.ElementFactory.make('decodebin', 'decoder0')
     queue = Gst.ElementFactory.make('queue', 'queue0')
     glimagesink = Gst.ElementFactory.make('glimagesink', "glimagesink0")
 
