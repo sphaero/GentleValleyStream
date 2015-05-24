@@ -1,6 +1,7 @@
 h1. Raspberry Pi Instructions
 
 Execute the following as root on a raspberry pi:
+
 <pre>
 cat << EOF > /etc/apt/sources.list.d/zix25.list
 deb http://lola.z25.org/~arnaud/debian zix25/
@@ -38,7 +39,8 @@ apt-get install gstreamer1.0-plugins-bad/zix25 \
     libgstreamer1.0-0/zix25 \
     libgstreamer-plugins-bad1.0-0/zix25 \
     libvpx1/jessie gst-rpicamsrc/zix25 \
-    libzmq3/zix25 libzmq3-dev/zix25 python3-pip
+    libzmq3/zix25 libzmq3-dev/zix25 python3-pip \
+    gstreamer1.0-omx/zix25
 
 pip-3.2 install pyzmq
 pip-3.2 install ipaddress
